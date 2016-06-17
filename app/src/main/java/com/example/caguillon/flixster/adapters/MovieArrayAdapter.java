@@ -19,6 +19,14 @@ import java.util.List;
  */
 public class MovieArrayAdapter extends ArrayAdapter<Movie>{
 
+    //View lookup cache
+    private static class ViewHolder{
+        //TextView name
+        TextView tvTitle;
+        //TextView home
+        TextView tvOverview;
+    }
+
     //Constructor
     public MovieArrayAdapter(Context context, List<Movie> movies){
         super(context, android.R.layout.simple_list_item_1, movies);
@@ -29,10 +37,20 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie>{
         //get the data item for position
         Movie movie = getItem(position);
 
-        //check the existing view being reused
+        //check if an existing view is being reused, otherwise inflate the view
+        ViewHolder viewHolder; //view lookup cache stored in tag
+
         if(convertView == null){
+            viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.item_movie, parent, false);
+            viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
+            viewHolder.tvOverview = (TextView) convertView.findViewById(R.id.tvOverview);
+            //can also implement with ImageView
+            convertView.setTag(viewHolder);
+
+        } else{
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
         //find the image view
