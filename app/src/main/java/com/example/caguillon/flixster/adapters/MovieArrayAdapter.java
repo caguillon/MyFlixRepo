@@ -25,6 +25,8 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie>{
         TextView tvTitle;
         //TextView home
         TextView tvOverview;
+        //ImageView
+        ImageView ivImage;
     }
 
     //Constructor
@@ -46,27 +48,22 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie>{
             convertView = inflater.inflate(R.layout.item_movie, parent, false);
             viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
             viewHolder.tvOverview = (TextView) convertView.findViewById(R.id.tvOverview);
-            //can also implement with ImageView
+            viewHolder.ivImage = (ImageView) convertView.findViewById(R.id.ivMovieImage);
             convertView.setTag(viewHolder);
 
         } else{
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        //find the image view
-        ImageView ivImage = (ImageView) convertView.findViewById(R.id.ivMovieImage);
-
         //clear out image from convertView
-        ivImage.setImageResource(0);
-
-        TextView tvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
-        TextView tvOverview = (TextView) convertView.findViewById(R.id.tvOverview);
+        viewHolder.ivImage.setImageResource(0);
 
         //populate data
-        tvTitle.setText(movie.getOriginalTitle());
-        tvOverview.setText(movie.getOverview());
+        viewHolder.tvTitle.setText(movie.getOriginalTitle());
+        viewHolder.tvOverview.setText(movie.getOverview());
 
-        Picasso.with(getContext()).load(movie.getPosterPath()).into(ivImage);
+        //loads images and placeholders if needed
+        Picasso.with(getContext()).load(movie.getPosterPath()).fit().centerCrop().placeholder(R.drawable.default_poster).into(viewHolder.ivImage);
 
         //return the view
         return convertView;
